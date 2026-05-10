@@ -27,7 +27,7 @@ export default function SessionList({ sessions }: Props) {
       {sessions.map((session) => (
         <Link
           key={session.id}
-          href={`/sessions/${session.id}`}
+          href={session.status === "completed" ? `/sessions/${session.id}` : `/interview/${session.id}`}
           className="block border border-gray-200 rounded-xl p-4 hover:border-blue-300 hover:shadow-sm transition"
         >
           <div className="flex items-center justify-between">

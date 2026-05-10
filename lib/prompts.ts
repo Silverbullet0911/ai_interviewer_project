@@ -8,10 +8,10 @@ export function buildAttackPlanPrompt(materialTexts: Record<string, string>): st
     sections.push(`## 学生简历\n${materialTexts.resume}`);
   }
   if (materialTexts.notification) {
-    sections.push(`## 面试通知\n${materialTexts.notification}`);
+    sections.push(`## 面试内容\n${materialTexts.notification}`);
   }
   if (materialTexts.past_exams) {
-    sections.push(`## 往年真题\n${materialTexts.past_exams}`);
+    sections.push(`## 参考题目\n${materialTexts.past_exams}`);
   }
   if (materialTexts.statement) {
     sections.push(`## 个人陈述\n${materialTexts.statement}`);
@@ -20,7 +20,9 @@ export function buildAttackPlanPrompt(materialTexts: Record<string, string>): st
     sections.push(`## 成绩单\n${materialTexts.transcript}`);
   }
 
-  return `你是一位经验丰富的保研复试面试教授。请根据以下学生材料生成面试攻击计划。
+  const now = new Date().toLocaleString("zh-CN", { timeZone: "Asia/Shanghai" });
+
+  return `当前时间：${now}。你是一位经验丰富的保研复试面试教授。请根据以下学生材料生成面试攻击计划。
 
 ${sections.join("\n\n")}
 
@@ -66,7 +68,9 @@ export async function buildInterviewSystemPrompt(
     (p) => `- [${p.severity}] ${p.weakness}（来源：${p.source}）→ 策略：${p.strategy} | ${p.covered ? "已覆盖" : "未覆盖"}`
   ).join("\n");
 
-  return `你是一位保研复试面试教授，正在对一名学生进行模拟面试。
+  const now = new Date().toLocaleString("zh-CN", { timeZone: "Asia/Shanghai" });
+
+  return `当前时间：${now}。你是一位保研复试面试教授，正在对一名学生进行模拟面试。
 
 ## 面试通知要求
 ${topics || "无特定通知要求，按标准保研面试流程进行"}
@@ -101,7 +105,9 @@ export function buildDebriefPrompt(
     .map((m) => `[${m.role === "assistant" ? "面试官" : "学生"}] ${m.content}`)
     .join("\n");
 
-  return `你是一位保研复试面试教授，请根据以下面试对话生成结构化复盘报告。
+  const now = new Date().toLocaleString("zh-CN", { timeZone: "Asia/Shanghai" });
+
+  return `当前时间：${now}。你是一位保研复试面试教授，请根据以下面试对话生成结构化复盘报告。
 
 ## 攻击路线图（面试前制定）
 ${JSON.stringify(attackPlan.attack_points, null, 2)}

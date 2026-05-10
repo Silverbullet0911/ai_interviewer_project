@@ -91,7 +91,7 @@ export default function SessionPage() {
           <DebriefReportView report={data.debrief_report as DebriefReport} />
         ) : (
           <div className="max-w-3xl mx-auto py-4">
-            <ChatMessages messages={(data.messages || []) as Message[]} streaming="" />
+            <ChatMessages messages={(data.messages || []) as Message[]} streaming="" waiting={false} />
           </div>
         )}
       </div>
