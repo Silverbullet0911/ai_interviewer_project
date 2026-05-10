@@ -147,15 +147,16 @@ export default function InterviewPage() {
 
   if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center bg-gray-50">
-        <div className="flex flex-col items-center gap-3">
-          <span className="flex gap-1">
-            <span className="w-2.5 h-2.5 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-            <span className="w-2.5 h-2.5 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-            <span className="w-2.5 h-2.5 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
-          </span>
-          <span className="text-gray-400 text-sm">加载面试中...</span>
-          <span className="text-gray-300 text-xs">预计需要 2-3 分钟</span>
+      <div className="h-screen flex items-center justify-center bg-background">
+        <div className="w-full max-w-lg px-4 space-y-4">
+          <div className="text-center mb-6">
+            <p className="text-text-secondary text-sm font-medium">正在准备面试...</p>
+            <p className="text-text-muted text-xs mt-1">预计需要 2-3 分钟</p>
+          </div>
+          <div className="skeleton h-4 w-3/4" />
+          <div className="skeleton h-4 w-full" />
+          <div className="skeleton h-4 w-5/6" />
+          <div className="skeleton h-4 w-1/2" />
         </div>
       </div>
     );
@@ -163,10 +164,10 @@ export default function InterviewPage() {
 
   if (error) {
     return (
-      <div className="h-screen flex items-center justify-center bg-gray-50">
+      <div className="h-screen flex items-center justify-center bg-background">
         <div className="text-center">
           <p className="text-red-500 mb-4">{error}</p>
-          <button onClick={() => router.push("/")} className="text-blue-600 hover:underline text-sm">
+          <button onClick={() => router.push("/")} className="text-accent hover:underline text-sm">
             返回首页
           </button>
         </div>
@@ -175,9 +176,9 @@ export default function InterviewPage() {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-gray-50">
-      <header className="shrink-0 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
-        <h1 className="text-sm font-semibold text-gray-700">模拟面试 #{sessionId}</h1>
+    <div className="h-screen flex flex-col bg-background">
+      <header className="shrink-0 bg-surface border-b border-border px-4 py-3 flex items-center justify-between">
+        <h1 className="text-sm font-semibold text-text-secondary">模拟面试 #{sessionId}</h1>
         <InterviewControls
           onSkipTopic={handleSkipTopic}
           onEndInterview={handleEndInterview}
@@ -189,13 +190,11 @@ export default function InterviewPage() {
 
       <div className="shrink-0">
         {ending && (
-          <div className="bg-yellow-50 border-y border-yellow-200 px-4 py-2 text-center text-sm text-yellow-700">
-            <span className="flex gap-1 justify-center items-center">
+          <div className="bg-warning-light border-y border-yellow-200 px-4 py-2 text-center text-sm text-yellow-700">
+            <div className="flex items-center justify-center gap-2">
               正在生成复盘报告，预计需要 2-3 分钟
-              <span className="w-1.5 h-1.5 bg-yellow-500 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-              <span className="w-1.5 h-1.5 bg-yellow-500 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-              <span className="w-1.5 h-1.5 bg-yellow-500 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
-            </span>
+              <div className="skeleton h-1.5 w-16 inline-block" />
+            </div>
           </div>
         )}
         <ChatInput onSend={handleSend} disabled={sending || ended || ending} />

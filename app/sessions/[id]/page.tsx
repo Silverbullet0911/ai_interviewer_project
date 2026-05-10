@@ -28,8 +28,8 @@ export default function SessionPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <p className="text-gray-400">加载中...</p>
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <p className="text-text-muted">加载中...</p>
       </div>
     );
   }
@@ -37,47 +37,47 @@ export default function SessionPage() {
   if (!data) return null;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 px-4 py-3">
+    <div className="min-h-screen bg-background">
+      <header className="bg-surface border-b border-border px-4 py-3">
         <div className="max-w-3xl mx-auto flex items-center justify-between">
           <div>
-            <h1 className="text-sm font-semibold text-gray-700">
+            <h1 className="text-sm font-semibold text-text-secondary">
               面试 #{sessionId}
               <span className={`ml-2 text-xs px-2 py-0.5 rounded-full ${
-                data.status === "completed" ? "bg-green-100 text-green-700" : "bg-blue-100 text-blue-700"
+                data.status === "completed" ? "bg-success-light text-success" : "bg-accent-light text-accent"
               }`}>
                 {data.status === "completed" ? "已完成" : "进行中"}
               </span>
             </h1>
-            <p className="text-xs text-gray-400 mt-0.5">
+            <p className="text-xs text-text-muted mt-0.5">
               {new Date(data.created_at).toLocaleString("zh-CN")}
             </p>
           </div>
-          <button onClick={() => router.push("/")} className="text-sm text-blue-600 hover:underline">
+          <button onClick={() => router.push("/")} className="text-sm text-accent hover:underline">
             返回首页
           </button>
         </div>
       </header>
 
       {data.status === "completed" && data.debrief_report && (
-        <div className="bg-white border-b border-gray-200">
+        <div className="bg-surface border-b border-border">
           <div className="max-w-3xl mx-auto flex gap-4 px-4">
             <button
               onClick={() => setTab("debrief")}
-              className={`py-3 text-sm font-medium border-b-2 transition ${
+              className={`py-3 text-sm font-medium border-b-2 transition-all duration-150 ${
                 tab === "debrief"
-                  ? "border-blue-600 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700"
+                  ? "border-accent text-accent"
+                  : "border-transparent text-text-muted hover:text-text-secondary"
               }`}
             >
               复盘报告
             </button>
             <button
               onClick={() => setTab("chat")}
-              className={`py-3 text-sm font-medium border-b-2 transition ${
+              className={`py-3 text-sm font-medium border-b-2 transition-all duration-150 ${
                 tab === "chat"
-                  ? "border-blue-600 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700"
+                  ? "border-accent text-accent"
+                  : "border-transparent text-text-muted hover:text-text-secondary"
               }`}
             >
               对话记录

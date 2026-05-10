@@ -51,7 +51,7 @@ export default function FileUpload({ onUpload, uploading }: Props) {
     <form onSubmit={handleSubmit} className="space-y-4">
       {FIELDS.map((field) => (
         <div key={field.key}>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-text-secondary mb-1">
             {field.label}
             {field.required && <span className="text-red-500 ml-1">*</span>}
           </label>
@@ -60,15 +60,15 @@ export default function FileUpload({ onUpload, uploading }: Props) {
             onChange={(e) => handleTextChange(field.key, e.target.value)}
             placeholder={`输入${field.label}内容...`}
             rows={3}
-            className="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-y"
+            className="block w-full rounded-lg border border-border bg-white px-3 py-2 text-sm focus:ring-2 focus:ring-accent/30 resize-y"
           />
-          <p className="text-xs text-gray-400 mt-1">
+          <p className="text-xs text-text-muted mt-1">
             或上传文件（支持 PDF、TXT）：
             <input
               type="file"
               accept=".pdf,.txt"
               onChange={(e) => handleFileChange(field.key, e.target.files?.[0] || null)}
-              className="ml-1 text-xs text-gray-500 file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+              className="ml-1 text-xs text-text-muted file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-accent-light file:text-accent hover:file:bg-accent-light/70"
             />
           </p>
         </div>
@@ -77,7 +77,7 @@ export default function FileUpload({ onUpload, uploading }: Props) {
       <button
         type="submit"
         disabled={!canSubmit}
-        className="w-full rounded-xl bg-blue-600 px-6 py-3 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+        className="w-full rounded-xl bg-primary px-6 py-3 text-sm font-medium text-white hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150 active:scale-[0.97]"
       >
         {uploading ? "正在生成面试计划...（约 2-3 分钟）" : "开始模拟面试"}
       </button>

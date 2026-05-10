@@ -12,14 +12,14 @@ export default function InterviewControls({ onSkipTopic, onEndInterview, disable
       <button
         onClick={onSkipTopic}
         disabled={disabled}
-        className="text-sm px-3 py-1.5 rounded-lg border border-yellow-500 text-yellow-600 hover:bg-yellow-50 disabled:opacity-50 transition"
+        className="text-sm px-4 py-2 rounded-lg border border-border text-text-secondary hover:bg-muted disabled:opacity-50 transition-all duration-150"
       >
         跳过当前话题 →
       </button>
       <button
         onClick={onEndInterview}
         disabled={disabled}
-        className="text-sm px-3 py-1.5 rounded-lg border border-red-500 text-red-600 hover:bg-red-50 disabled:opacity-50 transition"
+        className="text-sm px-4 py-2 rounded-lg bg-destructive-light text-destructive hover:bg-red-100 disabled:opacity-50 transition-all duration-150"
       >
         结束面试
       </button>

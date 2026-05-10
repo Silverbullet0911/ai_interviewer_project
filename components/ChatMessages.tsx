@@ -34,7 +34,7 @@ export default function ChatMessages({ messages, streaming, waiting }: Props) {
     >
       {messages.length === 0 && waiting && (
         <div className="flex justify-center pt-20">
-          <span className="text-gray-400 text-sm">正在生成面试开场...</span>
+          <span className="text-text-muted text-sm">正在生成面试开场...</span>
         </div>
       )}
 
@@ -44,10 +44,10 @@ export default function ChatMessages({ messages, streaming, waiting }: Props) {
           className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
         >
           <div
-            className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap ${
+            className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap animate-fade-in-up ${
               msg.role === "user"
-                ? "bg-blue-600 text-white"
-                : "bg-white border border-gray-200 text-gray-800"
+                ? "bg-primary text-white rounded-br-md"
+                : "bg-surface border border-border text-text-primary rounded-bl-md"
             }`}
           >
             {msg.content}
@@ -57,21 +57,19 @@ export default function ChatMessages({ messages, streaming, waiting }: Props) {
 
       {streaming && (
         <div className="flex justify-start">
-          <div className="max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed bg-white border border-gray-200 text-gray-800 whitespace-pre-wrap">
+          <div className="max-w-[80%] rounded-2xl rounded-bl-md px-4 py-3 text-sm leading-relaxed bg-surface border border-border text-text-primary whitespace-pre-wrap">
             {streaming}
-            <span className="inline-block w-1.5 h-4 bg-gray-400 ml-0.5 animate-pulse align-middle" />
+            <span className="inline-block w-1.5 h-4 bg-accent ml-0.5 animate-pulse align-middle" />
           </div>
         </div>
       )}
 
       {waiting && !streaming && messages.length > 0 && (
         <div className="flex justify-start">
-          <div className="rounded-2xl px-4 py-3 bg-white border border-gray-200">
-            <span className="flex gap-1">
-              <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-              <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-              <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
-            </span>
+          <div className="max-w-[80%] rounded-2xl rounded-bl-md px-4 py-3 bg-surface border border-border space-y-3">
+            <div className="skeleton h-3 w-full" />
+            <div className="skeleton h-3 w-3/4" />
+            <div className="skeleton h-3 w-1/2" />
           </div>
         </div>
       )}
