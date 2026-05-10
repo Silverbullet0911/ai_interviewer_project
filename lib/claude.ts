@@ -1,47 +1,86 @@
-import Anthropic from "@anthropic-ai/sdk";
-import type { MessageParam } from "@anthropic-ai/sdk/resources/messages.mjs";
+const DEEPSEEK_BASE = "https://api.deepseek.com";
+const API_KEY = process.env.DEEPSEEK_API_KEY || "";
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY || "",
-});
+interface ChatMessage {
+  role: string;
+  content: string;
+}
 
 export async function claudeComplete(
   systemPrompt: string,
-  messages: MessageParam[],
+  messages: ChatMessage[],
   maxTokens: number = 4096
 ): Promise<string> {
-  const response = await anthropic.messages.create({
-    model: "claude-sonnet-4-6",
-    max_tokens: maxTokens,
-    system: systemPrompt,
-    messages: messages,
+  const res = await fetch(`${DEEPSEEK_BASE}/chat/completions`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: "deepseek-chat",
+      messages: [{ role: "system", content: systemPrompt }, ...messages],
+      max_tokens: maxTokens,
+      temperature: 0.7,
+    }),
   });
 
-  const textBlock = response.content.find((b) => b.type === "text");
-  if (!textBlock || textBlock.type !== "text") {
-    throw new Error("Claude returned no text content");
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.error?.message || `DeepSeek API error: ${res.status}`);
   }
-  return textBlock.text;
+  return data.choices[0].message.content;
 }
 
 export async function* claudeStream(
   systemPrompt: string,
-  messages: MessageParam[],
+  messages: ChatMessage[],
   maxTokens: number = 2048
 ): AsyncGenerator<string> {
-  const stream = await anthropic.messages.stream({
-    model: "claude-sonnet-4-6",
-    max_tokens: maxTokens,
-    system: systemPrompt,
-    messages: messages,
+  const res = await fetch(`${DEEPSEEK_BASE}/chat/completions`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: "deepseek-chat",
+      messages: [{ role: "system", content: systemPrompt }, ...messages],
+      max_tokens: maxTokens,
+      temperature: 0.7,
+      stream: true,
+    }),
   });
 
-  for await (const event of stream) {
-    if (
-      event.type === "content_block_delta" &&
-      event.delta.type === "text_delta"
-    ) {
-      yield event.delta.text;
+  if (!res.ok) {
+    const data = await res.json();
+    throw new Error(data.error?.message || `DeepSeek API error: ${res.status}`);
+  }
+
+  const reader = res.body?.getReader();
+  if (!reader) throw new Error("No response stream");
+
+  const decoder = new TextDecoder();
+  let buffer = "";
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split("\n");
+    buffer = lines.pop() || "";
+
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed || !trimmed.startsWith("data: ")) continue;
+      const jsonStr = trimmed.slice(6);
+      if (jsonStr === "[DONE]") return;
+      try {
+        const parsed = JSON.parse(jsonStr);
+        const delta = parsed.choices?.[0]?.delta?.content;
+        if (delta) yield delta;
+      } catch {}
     }
   }
 }
